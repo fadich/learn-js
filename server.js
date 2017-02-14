@@ -11,7 +11,7 @@ var app = express();
 app.use(bodyParser.urlencoded());
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 
-app.use(express.static(__dirname + '/layouts'));
+app.use(express.static(__dirname + '/web'));
 
 app.get("/", function(req, res) {
     res.render("index");
