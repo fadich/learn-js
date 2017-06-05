@@ -53,31 +53,60 @@ function GA(func, popSize) {
     this.crossover = function (avgFitness) {
         avgFitness = avgFitness || Infinity;
 
-        // Getting parents numbers.
-        var parents = {father: 0, mother: 0};
-        while (!parents.father) {
-            var father = +(Math.random() * (this.population.length - 1)).toFixed();
-            if (this.population[father].z <= avgFitness) {
-                parents.father = father;
+        for (var i = +(Math.random() * (this.population.length - 1)).toFixed(); i > 0; i--) {
+            // Getting parents numbers.
+            var parents = {father: 0, mother: 0};
+            while (!parents.father) {
+                var father = +(Math.random() * (this.population.length - 1)).toFixed();
+                if (this.population[father].z <= avgFitness) {
+                    parents.father = father;
+                }
             }
+            while (!parents.mother) {
+                var mother = +(Math.random() * (this.population.length - 1)).toFixed();
+                if (this.population[mother].z <= avgFitness && mother != parents.father) {
+                    parents.mother = mother;
+                }
+            }
+            var child = {
+                x: this.population[parents.father].x,
+                y: this.population[parents.mother].y,
+                z: null,
+                toString: function () {
+                    return "X: " + this.x + "; Y: " + this.y + "; Z: " + this.z;
+                }
+            };
+            child.z = func(child.x, child.y);
         }
-        while (!parents.mother) {
-            var mother = +(Math.random() * (this.population.length - 1)).toFixed();
-            if (this.population[mother].z <= avgFitness && mother != parents.father) {
-                parents.mother = mother;
-            }
-        }
-
-        var child = {
-            x: this.population[parents.father].x,
-            y: this.population[parents.mother].y,
-            z: null,
-            toString: function () {
-                return "X: " + this.x + "; Y: " + this.y + "; Z: " + this.z;
-            }
-        };
-        child.z = func(child.x, child.y);
 
         this.population.push(child)
     };
+
+    this.selection = function() {
+        var selected = [];
+        // Sorting population bu fitness.
+        this.sortPopulation();
+
+        for (var i = 0; i < popSize; i++) {
+            selected[i] = this.population[i];
+        }
+        this.population = selected;
+    }
+
+    this.sortPopulation = function() {
+        // Using selection sort.
+        var len = this.population.length;
+        for (var i = 0; i < len - 1; i++) {
+            var min = i;
+            for (var j = i + 1; j < len; j++) {
+                if (this.population[j].z < this.population[i].z) {
+                    min = j;
+                }
+            }
+            // Swap the elements.
+            var tmp = this.population[i];
+            this.population[i] = this.population[min];
+            this.population[min] = tmp;
+        }
+    }
 };

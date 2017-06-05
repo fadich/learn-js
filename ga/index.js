@@ -1,15 +1,19 @@
 'use strict';
 
 // Init GA.
+// function objective(x, y) {
+//     var z = 20 + Math.pow(x, 2) + Math.pow(y, 2) -
+//         10 * Math.cos(2 * Math.PI * x) - 10 * Math.cos(2 * Math.PI * y);
+//     return +z.toFixed(5);
+// }
 function objective(x, y) {
-    var z = 20 + Math.pow(x, 2) + Math.pow(y, 2) -
-        10 * Math.cos(2 * Math.PI * x) - 10 * Math.cos(2 * Math.PI * y);
+    var z = Math.pow(x, 2) + Math.pow(y, 2);
     return +z.toFixed(5);
 }
 objective.min = -5.12;
 objective.max = 5.12;
 
-var ga = new (require('./ga'))(objective, 10);
+var ga = new (require('./ga'))(objective, 100);
 
 module.exports = run;
 
@@ -47,6 +51,11 @@ function run(io, clientHash, stop) {
             for: clientHash
         });
         ga.crossover(fitness);
+        ga.selection();
+        io.emit('log', {
+            msg: getArrayList(ga.population, ++listId, "Selected population: "),
+            for: clientHash
+        });
     }
 
     io.emit('start', { for: clientHash });
