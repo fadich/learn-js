@@ -3,6 +3,7 @@ var http = require('http').Server(app);
 var bodyParser = require('body-parser');
 var io = require('socket.io')(http);
 
+var ga = require('./ga/index');
 
 app.use( bodyParser.json() );
 
@@ -20,8 +21,7 @@ app.post('/send', function(req, res) {
 
 io.on('connection', function(socket) {
     socket.on('start', function (clientHash) {
-        io.emit('log', { msg: "Test", for: clientHash });
-        io.emit('start', { msg: "Test", for: clientHash });
+        ga(io, clientHash);
     })
 });
 

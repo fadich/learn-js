@@ -7,23 +7,33 @@ $(function () {
 
     socket.on('log', function(log) {
         if (log.for === clientHash) {
-            $('body').append($('<li class="r-log">').text(log.msg));
+            $('body').append($('<li class="r-log">').append(log.msg));
         }
     });
 
     $('.r-run button').on('click', function () {
         var runPanel = $(this).closest('.r-run');
 
+        // Starting algorithm.
         runPanel.hide();
         $('.r-log').remove();
         socket.emit('start', clientHash);
         socket.on('start', function(res) {
+            // On finish of algorithm.
             if (res.for === clientHash) {
                 runPanel.show();
             }
         });
     });
 });
+
+function closeItem() {
+    var $btn = $('.r-close-list');
+    var listId = $btn.data('listId');
+    var $list = $('#item-list-' + listId);
+
+    $list.toggleClass('r-hidden');
+}
 
 /**
  * Generator class.
