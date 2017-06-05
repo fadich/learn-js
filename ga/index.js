@@ -31,7 +31,7 @@ function run(io, clientHash, stop) {
     var startTime = +new Date();
 
     stop = typeof stop === 'Object' ? stop : {};
-    stop.iterations = stop.iterations || 12;
+    stop.iterations = stop.iterations || 15;
     stop.time = stop.time || null;
     stop.value = stop.value || null;
 
@@ -44,32 +44,32 @@ function run(io, clientHash, stop) {
     });
 
     for (var i = 0; i < stop.iterations; i++) {
-        var fitness = ga.getAvgFitness();
+        setTimeout((function iteration(i) {
+            return function () {
+                var fitness = ga.getAvgFitness();
 
-        console.log("Iteration #" + (1 + i));
+                console.log("Iteration #" + (1 + i));
 
-        io.emit('log', {msg: "<h4 align='center'>ITERATION #" + (i + 1) + "</h4>", for: clientHash});
+                io.emit('log', {msg: "<h4 align='center'>ITERATION #" + (i + 1) + "</h4>", for: clientHash});
 
-        io.emit('log', {msg: "Average fitness: " + fitness, for: clientHash});
-        ga.crossover(fitness);
-        ga.mutate();
+                io.emit('log', {msg: "Average fitness: " + fitness, for: clientHash});
+                ga.crossover(fitness);
+                ga.mutate();
 
-        io.emit('log', {
-            msg: getArrayList(ga.population, ++listId, "Crossover and mutation... Population: "),
-            for: clientHash
-        });
+                io.emit('log', {
+                    msg: getArrayList(ga.population, ++listId, "Crossover and mutation... Population: "),
+                    for: clientHash
+                });
 
-        ga.selection();
-        if (i + 1 === stop.iterations) {
-            io.emit('log', {
-                msg: getArrayList(ga.population, ++listId, "Selected population: "),
-                for: clientHash
-            });
-        }
-
-        // if (startTime + stop.time > +(new Date())) {
-        //     break;
-        // }
+                ga.selection();
+                if (i + 1 === stop.iterations) {
+                    io.emit('log', {
+                        msg: getArrayList(ga.population, ++listId, "Selected population: "),
+                        for: clientHash
+                    });
+                }
+            }
+        })(i), 100 * i);
     }
 
     io.emit('start', { for: clientHash });
