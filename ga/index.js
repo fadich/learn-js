@@ -1,19 +1,19 @@
 'use strict';
 
 // Init GA.
-// function objective(x, y) {
-//     var z = 20 + Math.pow(x, 2) + Math.pow(y, 2) -
-//         10 * Math.cos(2 * Math.PI * x) - 10 * Math.cos(2 * Math.PI * y);
-//     return +z.toFixed(5);
-// }
 function objective(x, y) {
-    var z = Math.pow(x, 2) + Math.pow(y, 2);
+    var z = 20 + Math.pow(x, 2) + Math.pow(y, 2) -
+        10 * Math.cos(2 * Math.PI * x) - 10 * Math.cos(2 * Math.PI * y);
     return +z.toFixed(5);
 }
+// function objective(x, y) {
+//     var z = Math.pow(x, 2) + Math.pow(y, 2);
+//     return +z.toFixed(5);
+// }
 objective.min = -5.12;
 objective.max = 5.12;
 
-var ga = new (require('./ga'))(objective, 100);
+var ga = new (require('./ga'))(objective, 1000);
 
 module.exports = run;
 
@@ -30,8 +30,8 @@ function run(io, clientHash, stop) {
     var listId = 0;
     var startTime = +new Date();
 
-    stop = typeof stop === 'Object'? stop : {};
-    stop.iterations = stop.iterations || 100;
+    stop = typeof stop === 'Object' ? stop : {};
+    stop.iterations = stop.iterations || 12;
     stop.time = stop.time || null;
     stop.value = stop.value || null;
 
@@ -44,18 +44,32 @@ function run(io, clientHash, stop) {
     });
 
     for (var i = 0; i < stop.iterations; i++) {
-        var fitness = ga.avgFitness();
+        var fitness = ga.getAvgFitness();
+
+        console.log("Iteration #" + (1 + i));
+
+        io.emit('log', {msg: "<h4 align='center'>ITERATION #" + (i + 1) + "</h4>", for: clientHash});
+
         io.emit('log', {msg: "Average fitness: " + fitness, for: clientHash});
-        io.emit('log', {
-            msg: getArrayList(ga.population, ++listId, "Crossover... Population: "),
-            for: clientHash
-        });
         ga.crossover(fitness);
-        ga.selection();
+        ga.mutate();
+
         io.emit('log', {
-            msg: getArrayList(ga.population, ++listId, "Selected population: "),
+            msg: getArrayList(ga.population, ++listId, "Crossover and mutation... Population: "),
             for: clientHash
         });
+
+        ga.selection();
+        if (i + 1 === stop.iterations) {
+            io.emit('log', {
+                msg: getArrayList(ga.population, ++listId, "Selected population: "),
+                for: clientHash
+            });
+        }
+
+        // if (startTime + stop.time > +(new Date())) {
+        //     break;
+        // }
     }
 
     io.emit('start', { for: clientHash });

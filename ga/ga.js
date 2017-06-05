@@ -39,7 +39,7 @@ function GA(func, popSize) {
         }
     };
 
-    this.avgFitness = function () {
+    this.getAvgFitness = function () {
         var avg = 0;
         var popSize = this.population.length;
 
@@ -77,9 +77,41 @@ function GA(func, popSize) {
                 }
             };
             child.z = func(child.x, child.y);
+            this.population.push(child);
         }
 
-        this.population.push(child)
+        return this;
+    };
+
+    this.mutate = function () {
+        // Probability of mutation of one or several individuals.
+        var mutated = [];
+        var penalty = 0; // Is subtracted from the probability at each iteration.
+        var probability = Math.random();
+        // Calculating probability.
+        while (probability - penalty >= 0) {
+            // Getting the individual number.
+            do {
+                var individNum = +(Math.random() * (this.population.length - 1)).toFixed();
+            } while (mutated.indexOf(individNum) >= 0 && mutated.length < this.population.length);
+
+            var min = func.min || 0;
+            var max = func.max || 1;
+            var mutationProp = Math.round(Math.random()) ? 'x' : 'y';
+            var mutVal = +(Math.random() * (max - min) + min).toFixed(5);
+
+            this.population[individNum][mutationProp] = mutVal;
+            this.population[individNum].z = func(
+                this.population[individNum].x,
+                this.population[individNum].y
+            );
+
+            mutated.push(individNum);
+            penalty += (1 - probability) * 0.1;
+            probability = Math.random();
+        }
+
+        return this;
     };
 
     this.selection = function() {
@@ -88,25 +120,31 @@ function GA(func, popSize) {
         this.sortPopulation();
 
         for (var i = 0; i < popSize; i++) {
-            selected[i] = this.population[i];
+            selected.push(this.population[i]);
         }
         this.population = selected;
-    }
+
+        return this;
+    };
 
     this.sortPopulation = function() {
         // Using selection sort.
         var len = this.population.length;
-        for (var i = 0; i < len - 1; i++) {
+        for (var i = 0; i < len; i++) {
             var min = i;
             for (var j = i + 1; j < len; j++) {
-                if (this.population[j].z < this.population[i].z) {
+                if (this.population[j].z < this.population[min].z) {
                     min = j;
                 }
             }
             // Swap the elements.
-            var tmp = this.population[i];
-            this.population[i] = this.population[min];
-            this.population[min] = tmp;
+            if (i != min) {
+                var tmp = this.population[i];
+                this.population[i] = this.population[min];
+                this.population[min] = tmp;
+            }
         }
-    }
-};
+
+        return this;
+    };
+}
