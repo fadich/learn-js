@@ -1,14 +1,53 @@
 $(function () {
     var socket = io();
-    $('form').submit(function(){
-        socket.emit('message', $('input[name="message"]').val());
-        $('input[name="message"]').val('');
-        return false;
-    });
+    var gen = new Generator();
+    var clientHash = gen.random.string(64);
 
-    socket.on('message', function(msg){
-        if (msg.for === "everyone") {
-            $('body').append($('<li>').text(msg.msg));
+    socket.emit('hello', clientHash);
+
+    socket.on('log', function(log) {
+        if (log.for === clientHash) {
+            $('body').append($('<li class="r-log">').text(log.msg));
         }
     });
+
+    $('.r-run button').on('click', function () {
+        var runPanel = $(this).closest('.r-run');
+
+        runPanel.hide();
+        $('.r-log').remove();
+        socket.emit('start', clientHash);
+        socket.on('start', function(res) {
+            if (res.for === clientHash) {
+                runPanel.show();
+            }
+        });
+    });
 });
+
+/**
+ * Generator class.
+ *
+ * @constructor
+ */
+function Generator() {
+    /**
+     * Random generator.
+     *
+     * @type {Random}
+     */
+    this.random = new (function Random() {
+        this.string = function (len) {
+            len = len || 10;
+
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            for( var i = 0; i < len; i++ ) {
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            }
+            return text;
+        };
+    })();
+}
+

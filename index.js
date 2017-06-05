@@ -15,13 +15,14 @@ app.get('/src/:file', function (req, res) {
     res.sendFile(__dirname + '/src/' + file + '.js');
 });
 
-app.post('/send', function(req, res){
+app.post('/send', function(req, res) {
 });
 
-io.on('connection', function(socket){
-    socket.on('message', function(msg){
-        io.emit('message', { msg: msg, for: 'everyone' });
-    });
+io.on('connection', function(socket) {
+    socket.on('start', function (clientHash) {
+        io.emit('log', { msg: "Test", for: clientHash });
+        io.emit('start', { msg: "Test", for: clientHash });
+    })
 });
 
 http.listen(4242, function(){
