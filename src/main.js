@@ -27,11 +27,8 @@ $(function () {
     });
 });
 
-function closeItem() {
-    var $btn = $('.r-close-list');
-    var listId = $btn.data('listId');
+function closeItem(listId) {
     var $list = $('#item-list-' + listId);
-
     $list.toggleClass('r-hidden');
 }
 

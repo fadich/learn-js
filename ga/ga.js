@@ -2,6 +2,13 @@
 
 module.exports = GA;
 
+/**
+ * GenAlg.
+ *
+ * @param {Object} func Objective function (is a callback with min/max range properties).
+ * @param {Number} popSize Population size.
+ * @constructor
+ */
 function GA(func, popSize) {
     popSize = popSize || 100;
 
@@ -30,5 +37,47 @@ function GA(func, popSize) {
             this.population[i] = individ;
             i++;
         }
+    };
+
+    this.avgFitness = function () {
+        var avg = 0;
+        var popSize = this.population.length;
+
+        for (var i = 0; i < popSize; i++) {
+            avg += this.population[i].z;
+        }
+
+        return +(avg / popSize).toFixed(5);
+    };
+
+    this.crossover = function (avgFitness) {
+        avgFitness = avgFitness || Infinity;
+
+        // Getting parents numbers.
+        var parents = {father: 0, mother: 0};
+        while (!parents.father) {
+            var father = +(Math.random() * (this.population.length - 1)).toFixed();
+            if (this.population[father].z <= avgFitness) {
+                parents.father = father;
+            }
+        }
+        while (!parents.mother) {
+            var mother = +(Math.random() * (this.population.length - 1)).toFixed();
+            if (this.population[mother].z <= avgFitness && mother != parents.father) {
+                parents.mother = mother;
+            }
+        }
+
+        var child = {
+            x: this.population[parents.father].x,
+            y: this.population[parents.mother].y,
+            z: null,
+            toString: function () {
+                return "X: " + this.x + "; Y: " + this.y + "; Z: " + this.z;
+            }
+        };
+        child.z = func(child.x, child.y);
+
+        this.population.push(child)
     };
 };
