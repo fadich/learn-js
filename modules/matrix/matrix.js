@@ -5,32 +5,51 @@
      * Working with matrix (or vector).
      * Provides facilities for working with matrix n*m.
      *
-     * @param val
      * @constructor
      */
-    function Matrix(val) {
-        if (!1) {
-            val = [];
-        }
-
+    function Matrix() {
+        var value = [];
         var dimension = {
-            rows: 0,
-            cols: 0
+            cols: 0,
+            rows: 0
         };
 
         this.get = function () {
-            return val;
+            return value;
+        };
+
+        this.addCol = function (column) {
+            // TODO: Add column.
+            dimension.cols++;
+        };
+
+        this.addRow = function (row) {
+            // TODO: Add row.
+            dimension.rows++;
         };
 
         this.getTransposed = function () {
             // TODO: transpose matrix;
         };
 
+        this.getDimension = function () {
+            return dimension;
+        };
+
         this.getDimensionAsString = function () {
             return dimension.cols + "x" + dimension.rows;
         };
-
     }
+
+    Matrix.create = function (val) {
+        if (Matrix.isVector(val)) {
+            val = [val];
+        }
+        if (!Matrix.isMatrix(val)) {
+            // val = [];
+            throw new TypeError("The value is not valid N*M matrix");
+        }
+    };
 
     /**
      * Counting sum of matrix (matrix1 + matrix2).
@@ -80,12 +99,14 @@
             return false;
         }
 
-        var res = true;
+        var len = first.length;
         for (var i = 0; i < val.length; i++) {
-            res &= Matrix.isVector(val[i]);
+            if (!Matrix.isVector(val[i]) || val[i].length !== len) {
+                return false;
+            }
         }
 
-        return res;
+        return true;
     };
 
     /**
