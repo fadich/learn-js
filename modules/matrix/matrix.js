@@ -54,7 +54,7 @@
      * @return {Array}
      *   Result matrix.
      */
-    Matrix.product = function (matrix1, matrix2, matrixN) {
+    Matrix.product = function (matrix1, matrix2) {
         // TODO: Count production.
     };
 
