@@ -13,7 +13,10 @@
             val = [];
         }
 
-        var dimension = [];
+        var dimension = {
+            rows: 0,
+            cols: 0
+        };
 
         this.get = function () {
             return val;
@@ -24,7 +27,7 @@
         };
 
         this.getDimensionAsString = function () {
-
+            return dimension.cols + "x" + dimension.rows;
         };
 
     }
