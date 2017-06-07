@@ -24,7 +24,20 @@
         };
 
         this.addRow = function (row) {
-            // TODO: Add row.
+            var i = 0;
+
+            // if (dimension.cols && row.length !== dimension.cols) {
+            //     throw new RangeError("The matrix row length should be " + dimension.cols);
+            // } else if (dimension.cols) {
+            //     i = dimension.cols;
+            // } else {
+            //     dimension.cols++;
+            // }
+            //
+            // for (var j = 0; j < row.length; j++) {
+            //     value[i][j]
+            // }
+
             dimension.rows++;
         };
 
@@ -44,10 +57,15 @@
     Matrix.create = function (val) {
         if (Matrix.isVector(val)) {
             val = [val];
-        }
-        if (!Matrix.isMatrix(val)) {
+        } else if (!Matrix.isMatrix(val)) {
             // val = [];
             throw new TypeError("The value is not valid N*M matrix");
+        }
+
+        var matrix = new Matrix();
+        var cols = val.length;
+        for (var i = 0; i < cols; i++) {
+            matrix.addRow(val[i]);
         }
     };
 
