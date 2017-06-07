@@ -33,35 +33,29 @@
     }
 
     /**
-     * Counting sum of matrix (matrix1 + matrix2 + ... + matrixN).
+     * Counting sum of matrix (matrix1 + matrix2).
      *
      * @param {Matrix} matrix1 Instances of Matrix.
      * @param {Matrix} matrix2
-     * @param {Matrix} matrixN
      *
      * @return {Array}
      *   Result matrix.
      */
-    Matrix.sum = function (matrix1, matrix2, matrixN) {
-        for (var i = 0; i < arguments.length; i++) {
-            // TODO: Count sum.
-        }
+    Matrix.sum = function (matrix1, matrix2) {
+        // TODO: Count sum.
     };
 
     /**
-     * Counting product of matrix (matrix1 * matrix2 * ... * matrixN).
+     * Counting product of matrix (matrix1 * matrix2).
      *
      * @param {Matrix} matrix1 Instances of Matrix.
      * @param {Matrix} matrix2
-     * @param {Matrix} matrixN
      *
      * @return {Array}
      *   Result matrix.
      */
     Matrix.product = function (matrix1, matrix2, matrixN) {
-        for (var i = 0; i < arguments.length; i++) {
-            // TODO: Count production.
-        }
+        // TODO: Count production.
     };
 
     /**
