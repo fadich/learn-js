@@ -155,6 +155,8 @@
         return true;
     };
 
+
+    // Exporting class (rewrite module.exports);
     if (typeof window === 'undefined') {
         module.exports = Matrix;
     } else {
