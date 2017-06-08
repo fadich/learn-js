@@ -14,7 +14,11 @@
             rows: 0
         };
 
-        this.get = function () {
+        this.get = function (row, col) {
+            if (row !== undefined && row !== null && col !== undefined && col !== null) {
+                return value[col][row];
+            }
+
             return value;
         };
 
@@ -86,7 +90,7 @@
         var cols = val.length;
         for (var i = 0; i < cols; i++) {
             if (val[i].length) {
-                matrix.addCol(val[i]);
+                matrix.addRow(val[i]);
             }
         }
 
