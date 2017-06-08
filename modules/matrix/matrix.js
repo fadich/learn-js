@@ -28,6 +28,7 @@
 
             value.push(column);
             dimension.cols++;
+            dimension.rows = column.length;
 
             return this;
         };
@@ -71,6 +72,9 @@
     }
 
     Matrix.create = function (val) {
+        if (!arguments.length) {
+            val = [];
+        }
         if (Matrix.isVector(val)) {
             val = [val];
         } else if (!Matrix.isMatrix(val)) {
@@ -81,8 +85,12 @@
         var matrix = new Matrix();
         var cols = val.length;
         for (var i = 0; i < cols; i++) {
-            matrix.addRow(val[i]);
+            if (val[i].length) {
+                matrix.addCol(val[i]);
+            }
         }
+
+        return matrix;
     };
 
     /**
@@ -123,7 +131,7 @@
             return false;
         }
 
-        var first = val.shift();
+        var first = val[0];
 
         if (!Array.isArray(first)) {
             return Matrix.isVector(val);

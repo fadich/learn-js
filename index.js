@@ -20,11 +20,13 @@ app.post('/send', function(req, res) {
 });
 
 io.on('connection', function(socket) {
-    var matrix = new Matrix();
+    var matrix = Matrix.create([
+        [1, 6],
+        [156, -6.6],
+        [99, 6]
+    ]);
 
-    console.log(matrix.addRow([12, 15, 13]).get());
-    console.log(matrix.addRow([12, 15, 13]).get());
-    console.log(matrix.addRow([12, 15, 13]).get());
+    console.log(matrix.get());
     console.log(matrix.getDimensionAsString());
     // io.emit('message', { msg: Matrix.isMatrix([1, 2, 6]), for: 'everyone' });
     // io.emit('message', { msg: Matrix.isMatrix([[]]), for: 'everyone' });
