@@ -19,8 +19,17 @@
         };
 
         this.addCol = function (column) {
-            // TODO: Add column.
+            if (!Matrix.isVector(column)) {
+                throw new TypeError("The matrix column should be a vector");
+            }
+            if (dimension.rows && column.length !== dimension.rows) {
+                throw new RangeError("The matrix column length should be  = " + dimension.rows);
+            }
+
+            value.push(column);
             dimension.cols++;
+
+            return this;
         };
 
         this.addRow = function (row) {
