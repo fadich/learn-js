@@ -21,16 +21,19 @@ app.post('/send', function(req, res) {
 
 io.on('connection', function(socket) {
     var matrix = Matrix.create([
-        [1, 2, 6],
-        [1, 2, 666],
-        [1, 2.28, -99],
-        ['test', 123, 99]
+        [1, 2],
+        [3, 4],
+        [-9, 17],
+        [8, 2]
     ]);
+    // matrix.addRow([12, 13]);
     // console.log(matrix.get());
     // console.log(matrix.getDimensionAsString());
 
-    console.log(matrix.get(2, 1));
-    console.log(matrix.getDimension());
+    // console.log(matrix.get());
+    // console.log(matrix.getDimensionAsString());
+
+    // console.log(matrix.getDimensionAsString());
 
 
     // io.emit('message', { msg: Matrix.isMatrix([1, 2, 6]), for: 'everyone' });

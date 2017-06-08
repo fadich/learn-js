@@ -27,12 +27,22 @@
                 throw new TypeError("The matrix column should be a vector");
             }
             if (dimension.rows && column.length !== dimension.rows) {
-                throw new RangeError("The matrix column length should be  = " + dimension.rows);
+                throw new RangeError("The matrix column length should be = " + dimension.rows);
             }
 
-            value.push(column);
             dimension.cols++;
-            dimension.rows = column.length;
+            if (!dimension.rows) {
+                for (var j = 0; j < column.length; j++) {
+                    value[j] = [column[j]];
+                }
+                dimension.rows = j;
+
+                return this;
+            }
+
+            for (var i = 0; i < dimension.rows; i++) {
+                value[i].push(column[i]);
+            }
 
             return this;
         };
@@ -42,22 +52,12 @@
                 throw new TypeError("The matrix row should be a vector");
             }
             if (dimension.cols && row.length !== dimension.cols) {
-                throw new RangeError("The matrix row length should be  = " + dimension.cols);
+                throw new RangeError("The matrix row length should be = " + dimension.cols);
             }
 
+            value.push(row);
             dimension.rows++;
-            if (!dimension.cols) {
-                for (var j = 0; j < row.length; j++) {
-                    value[j] = [row[j]];
-                }
-                dimension.cols = j;
-
-                return this;
-            }
-
-            for (var i = 0; i < dimension.cols; i++) {
-                value[i].push(row[i]);
-            }
+            dimension.cols = row.length;
 
             return this;
         };
@@ -72,6 +72,24 @@
 
         this.getDimensionAsString = function () {
             return dimension.cols + "x" + dimension.rows;
+        };
+
+        this.clear = function () {
+            value = [];
+            dimension.rows = 0;
+            dimension.cols = 0;
+
+            return this;
+        };
+
+        this.toString = function () {
+            var str = [];
+
+            for (var i = 0; i < value.length; i++) {
+                str.push(value[i].join(' '));
+            }
+
+            return '| ' + str.join(" |\n| ") + " |";
         };
     }
 
@@ -90,7 +108,7 @@
         var cols = val.length;
         for (var i = 0; i < cols; i++) {
             if (val[i].length) {
-                matrix.addRow(val[i]);
+                matrix.addCol(val[i]);
             }
         }
 
