@@ -1,4 +1,4 @@
-;(function (exports) {
+;(function () {
     "use strict";
 
     /**
@@ -24,21 +24,28 @@
         };
 
         this.addRow = function (row) {
-            var i = 0;
-
-            // if (dimension.cols && row.length !== dimension.cols) {
-            //     throw new RangeError("The matrix row length should be " + dimension.cols);
-            // } else if (dimension.cols) {
-            //     i = dimension.cols;
-            // } else {
-            //     dimension.cols++;
-            // }
-            //
-            // for (var j = 0; j < row.length; j++) {
-            //     value[i][j]
-            // }
+            if (!Matrix.isVector(row)) {
+                throw new TypeError("The matrix row should be a vector");
+            }
+            if (dimension.cols && row.length !== dimension.cols) {
+                throw new RangeError("The matrix row length should be  = " + dimension.cols);
+            }
 
             dimension.rows++;
+            if (!dimension.cols) {
+                for (var j = 0; j < row.length; j++) {
+                    value[j] = [row[j]];
+                }
+                dimension.cols = j;
+
+                return this;
+            }
+
+            for (var i = 0; i < dimension.cols; i++) {
+                value[i].push(row[i]);
+            }
+
+            return this;
         };
 
         this.getTransposed = function () {
@@ -148,7 +155,10 @@
         return true;
     };
 
+    if (typeof window === 'undefined') {
+        module.exports = Matrix;
+    } else {
+        window.Matrix = Matrix;
+    }
 
-    exports.Matrix = Matrix;
-
-})(window === undefined ? module.exports : window);
+})();

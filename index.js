@@ -20,9 +20,15 @@ app.post('/send', function(req, res) {
 });
 
 io.on('connection', function(socket) {
-    io.emit('message', { msg: Matrix.isMatrix([1, 2, 6]), for: 'everyone' });
-    io.emit('message', { msg: Matrix.isMatrix([[]]), for: 'everyone' });
-    io.emit('message', { msg: Matrix.isMatrix('qwe'), for: 'everyone' });
+    var matrix = new Matrix();
+
+    console.log(matrix.addRow([12, 15, 13]).get());
+    console.log(matrix.addRow([12, 15, 13]).get());
+    console.log(matrix.addRow([12, 15, 13]).get());
+    console.log(matrix.getDimensionAsString());
+    // io.emit('message', { msg: Matrix.isMatrix([1, 2, 6]), for: 'everyone' });
+    // io.emit('message', { msg: Matrix.isMatrix([[]]), for: 'everyone' });
+    // io.emit('message', { msg: Matrix.isMatrix('qwe'), for: 'everyone' });
 });
 
 http.listen(4242, function(){
