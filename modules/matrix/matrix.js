@@ -30,7 +30,6 @@
                 return this.getCol(col);
             }
 
-
             return value;
         };
 
@@ -102,6 +101,10 @@
             for (var i = 0; i < dimension.cols; i++) {
                 transposed.push(this.getCol(i));
             }
+
+            // if (dimension.rows === 1) {
+            //     transposed = [transposed];
+            // }
 
             return transposed;
         };
