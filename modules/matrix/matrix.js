@@ -144,7 +144,8 @@
             val = [val];
         } else if (!Matrix.isMatrix(val)) {
             // val = [];
-            throw new TypeError("The value is not valid N*M matrix");
+            // throw new TypeError("The value is not valid N*M matrix");
+            return undefined;
         }
 
         var matrix = new Matrix();
