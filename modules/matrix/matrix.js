@@ -15,9 +15,21 @@
         };
 
         this.get = function (row, col) {
-            if (row !== undefined && row !== null && col !== undefined && col !== null) {
+            var gettingRow = row !== undefined && row !== null;
+            var gettingCol = col !== undefined && col !== null;
+
+            if (gettingRow && gettingCol) {
                 return value[col][row];
             }
+
+            if (gettingRow) {
+                return this.getRow(row);
+            }
+
+            if (gettingCol) {
+                return this.getCol(col);
+            }
+
 
             return value;
         };
@@ -62,8 +74,36 @@
             return this;
         };
 
+        this.getCol = function (num) {
+            // Default number of getting column is 0;
+            num = num || 0;
+            if (num >= dimension.cols) {
+                return undefined;
+            }
+
+            var col = [];
+            for (var i = 0; i < dimension.rows; i++) {
+                col.push(value[i][num]);
+            }
+
+            return col;
+        };
+
+        this.getRow = function (num) {
+            // Default number of getting row is 0;
+            num = num || 0;
+
+            return value[num];
+        };
+
         this.getTransposed = function () {
-            // TODO: transpose matrix;
+            var transposed = [];
+
+            for (var i = 0; i < dimension.cols; i++) {
+                transposed.push(this.getCol(i));
+            }
+
+            return transposed;
         };
 
         this.getDimension = function () {
@@ -89,7 +129,7 @@
                 str.push(value[i].join(' '));
             }
 
-            return '| ' + str.join(" |\n| ") + " |";
+            return "| " + str.join(" |\n| ") + " |";
         };
     }
 
@@ -108,7 +148,7 @@
         var cols = val.length;
         for (var i = 0; i < cols; i++) {
             if (val[i].length) {
-                matrix.addCol(val[i]);
+                matrix.addRow(val[i]);
             }
         }
 

@@ -21,13 +21,14 @@ app.post('/send', function(req, res) {
 
 io.on('connection', function(socket) {
     var matrix = Matrix.create([
-        [1, 2],
-        [3, 4],
-        [-9, 17],
-        [8, 2]
+        1, 2, 123, 3
+        // [3, 4],
+        // [-9, 17],
+        // [8, 2]
     ]);
-    // matrix.addRow([12, 13]);
-    // console.log(matrix.get());
+    console.log(matrix.toString());
+    var transposed = Matrix.create(matrix.getTransposed());
+    console.log(transposed.get(6));
     // console.log(matrix.getDimensionAsString());
 
     // console.log(matrix.get());
