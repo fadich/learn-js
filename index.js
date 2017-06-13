@@ -20,21 +20,7 @@ app.post('/send', function(req, res) {
 });
 
 io.on('connection', function(socket) {
-    var matrix = Matrix.create([
-        [1], [2], [123], [3]
-        // [3, 4],
-        // [-9, 17],
-        // [8, 2]
-    ]);
-    console.log(matrix.getDimension());
-    var transposed = Matrix.create(matrix.getTransposed());
-    console.log(transposed.toString());
-    // console.log(matrix.getDimensionAsString());
 
-    // console.log(matrix.get());
-    // console.log(matrix.getDimensionAsString());
-
-    // console.log(matrix.getDimensionAsString());
 
 
     // io.emit('message', { msg: Matrix.isMatrix([1, 2, 6]), for: 'everyone' });

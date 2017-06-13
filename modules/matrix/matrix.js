@@ -134,6 +134,20 @@
 
             return "| " + str.join(" |\n| ") + " |";
         };
+
+        /**
+         * Counting sum of matrix (matrix1 + matrix2).
+         *
+         * @param {Matrix} matrix1 Instances of Matrix.
+         * @param {Matrix} matrix2
+         *
+         * @return {Array}
+         *   Result matrix.
+         */
+        Matrix.sum = function (matrix1, matrix2) {
+            // TODO: Count sum.
+        };
+
     }
 
     Matrix.create = function (val) {
@@ -157,19 +171,6 @@
         }
 
         return matrix;
-    };
-
-    /**
-     * Counting sum of matrix (matrix1 + matrix2).
-     *
-     * @param {Matrix} matrix1 Instances of Matrix.
-     * @param {Matrix} matrix2
-     *
-     * @return {Array}
-     *   Result matrix.
-     */
-    Matrix.sum = function (matrix1, matrix2) {
-        // TODO: Count sum.
     };
 
     /**
